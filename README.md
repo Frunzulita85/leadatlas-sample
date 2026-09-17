@@ -36,7 +36,4 @@ It demonstrates how I design production-ready backend services using **FastAPI**
 ### 🔹 Pagination
 - Simple and efficient paginated endpoint
 
----
-
-## 📁 Structure
 
