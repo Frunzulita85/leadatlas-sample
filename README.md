@@ -1,39 +1,31 @@
 # LeadAtlas Sample — FastAPI Backend Module
 
-This repository contains a clean, modular code sample extracted from my SaaS project **LeadAtlas.io**.  
-It demonstrates how I design production-ready backend services using **FastAPI**, **async pipelines**,  
-**Google Places API integration**, **data cleaning**, **deduplication**, **pagination**, and **CSV export**.
+This repository contains a modular backend component extracted from **LeadAtlas.io**.  
+It demonstrates production-ready API patterns using **FastAPI**, **async pipelines**,  
+**Google Places API integration**, **in-memory & DB deduplication**, **credit tracking**, and **data export**.
 
 ---
 
-## 🚀 Features Demonstrated
+## 🚀 Key Features
 
-### 🔹 Google Places API Integration
-- Text search (`searchText`)
-- Place details (phone, website)
-- Async bulk queries using `httpx.AsyncClient`
+### 🔹 Google Places API (New V1) Integration
+- **Text Search & Details:** Integrates Places API V1 with custom `X-Goog-FieldMask` headers to fetch place IDs, display names, ratings, phone numbers, and websites.
+- **Async Bulk Fetching:** Uses `httpx.AsyncClient` and `asyncio.gather` for concurrent multi-query execution and details extraction.
 
-### 🔹 Data Processing & Cleaning
-- Unicode normalization
-- Address/name cleaning
-- Custom deduplication logic based on normalized keys
+### 🔹 Data Processing & Normalization
+- **Unicode Normalization:** Diacritics removal and string standardization (`NFD` decomposition).
+- **In-Memory Deduplication:** Fast key-based deduplication (`normalized_name-normalized_address`) before persisting to DB.
 
-### 🔹 Database Operations
-- SQLAlchemy ORM models
-- CRUD endpoints
-- Bulk insert with dedupe
-- Database-level dedupe endpoint
+### 🔹 Database & CRUD (SQLAlchemy)
+- **ORM Persistence:** Clean separation using SQLAlchemy models and Pydantic schemas.
+- **Database Deduplication:** Dedicated `/leads/dedupe` endpoint to clean up historical duplicate entries directly in PostgreSQL/SQLite.
+- **Paginated Queries:** Simple limit/offset pagination endpoint.
 
-### 🔹 Credits System (SaaS Logic)
-- User authentication
-- Credit consumption per search
-- Stripe-ready architecture (not included in this sample)
+### 🔹 SaaS Usage & Credit Tracking
+- **Auth Dependency:** Route protection using custom `get_current_user` dependency.
+- **Per-Lead Credit Consumption:** Automatically decrements user credits dynamically based on the number of extracted unique leads.
 
-### 🔹 CSV Export
-- UTF‑8 safe CSV generation
-- Clean formatting for external tools
-
-### 🔹 Pagination
-- Simple and efficient paginated endpoint
+### 🔹 Data Export
+- **UTF-8-SIG CSV Streaming:** Generates Excel-friendly CSV exports (`delimiter=";"`) via `fastapi.responses.StreamingResponse`.
 
 
